@@ -97,6 +97,12 @@ cdef class SegmentationNormal:
         self.me.getMinMaxOpeningAngle(min_angle, max_angle)
         return min_angle, max_angle
 
+    def set_input_cloud(self, _pcl.PointCloud cloud):
+        self.me.setInputCloud(cloud.thisptr_shared)
+
+    def set_input_normals(self, _pcl.PointCloud_Normal normals):
+        self.me.setInputNormals(normals.thisptr_shared)
+
 
 cdef class Segmentation_PointXYZI_Normal:
     """
