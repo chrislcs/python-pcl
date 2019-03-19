@@ -10,6 +10,10 @@ cimport indexing as idx
 from boost_shared_ptr cimport sp_assign
 from _pcl cimport PointCloud_Normal
 
+cdef extern from "minipcl.h":
+    void mpcl_extract_Normal(cpp.PointCloud_Normal_Ptr_t, cpp.PointCloud_Normal_t *,
+                              cpp.PointIndices_t *, bool) except +
+
 cdef class PointCloud_Normal:
     """
     Represents a cloud of points in 4-d space.
@@ -20,13 +24,13 @@ cdef class PointCloud_Normal:
     """
     def __cinit__(self, init=None):
         cdef PointCloud_Normal other
-        
+
         self._view_count = 0
-        
+
         # TODO: NG --> import pcl --> pyd Error(python shapedptr/C++ shard ptr collusion?)
         # sp_assign(<cpp.shared_ptr[cpp.PointCloud[cpp.Normal]]> self.thisptr_shared, new cpp.PointCloud[cpp.Normal]())
         sp_assign(self.thisptr_shared, new cpp.PointCloud[cpp.Normal]())
-        
+
         if init is None:
             return
         elif isinstance(init, (numbers.Integral, np.integer)):
@@ -73,12 +77,12 @@ cdef class PointCloud_Normal:
         Fill this object from a 2D numpy array (float32)
         """
         assert arr.shape[1] == 4
-        
+
         cdef cnp.npy_intp npts = arr.shape[0]
         self.resize(npts)
         self.thisptr().width = npts
         self.thisptr().height = 1
-        
+
         cdef cpp.Normal *p
         for i in range(npts):
             p = idx.getptr(self.thisptr(), i)
@@ -93,7 +97,7 @@ cdef class PointCloud_Normal:
         cdef cnp.npy_intp n = self.thisptr().size()
         cdef cnp.ndarray[cnp.float32_t, ndim=2, mode="c"] result
         cdef cpp.Normal *p
-        
+
         result = np.empty((n, 4), dtype=np.float32)
         for i in range(n):
             p = idx.getptr(self.thisptr(), i)
@@ -143,23 +147,20 @@ cdef class PointCloud_Normal:
         cdef cpp.Normal *p = idx.getptr_at(self.thisptr(), nmidx)
         return p.normal_x, p.normal_y, p.normal_z, p.curvature
 
-    # def extract(self, pyindices, bool negative=False):
-    #     """
-    #     Given a list of indices of points in the pointcloud, return a 
-    #     new pointcloud containing only those points.
-    #     """
-    #     cdef PointCloud_Normal result
-    #     cdef cpp.PointIndices_t *ind = new cpp.PointIndices_t()
-    #     
-    #     for i in pyindices:
-    #         ind.indices.push_back(i)
-    #     
-    #     result = PointCloud_Normal()
-    #     # (<cpp.PointCloud[cpp.Normal]> deref(self.thisptr())
-    #     mpcl_extract_Normal(self.thisptr_shared, result.thisptr(), ind, negative)
-    #     # XXX are we leaking memory here? del ind causes a double free...
-    #     
-    #     return result
+    def extract(self, pyindices, bool negative=False):
+        """
+        Given a list of indices of points in the pointcloud, return a
+        new pointcloud containing only those points.
+        """
+        cdef PointCloud_Normal result
+        cdef cpp.PointIndices_t *ind = new cpp.PointIndices_t()
 
-###
+        for i in pyindices:
+            ind.indices.push_back(i)
 
+        result = PointCloud_Normal()
+        # (<cpp.PointCloud[cpp.Normal]> deref(self.thisptr())
+        mpcl_extract_Normal(self.thisptr_shared, result.thisptr(), ind, negative)
+        # XXX are we leaking memory here? del ind causes a double free...
+
+        return result

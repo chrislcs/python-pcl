@@ -12,20 +12,19 @@ void mpcl_compute_normals(const pcl::PointCloud<pcl::PointXYZ> &cloud,
                           double searchRadius,
                           pcl::PointCloud<pcl::Normal> &out);
 void mpcl_compute_normals_PointXYZI(const pcl::PointCloud<pcl::PointXYZI> &cloud,
-                          int ksearch,
-                          double searchRadius,
-                          pcl::PointCloud<pcl::Normal> &out);
+                                    int ksearch,
+                                    double searchRadius,
+                                    pcl::PointCloud<pcl::Normal> &out);
 
 void mpcl_compute_normals_PointXYZRGB(const pcl::PointCloud<pcl::PointXYZRGB> &cloud,
-                          int ksearch,
-                          double searchRadius,
-                          pcl::PointCloud<pcl::Normal> &out);
+                                      int ksearch,
+                                      double searchRadius,
+                                      pcl::PointCloud<pcl::Normal> &out);
 
 void mpcl_compute_normals_PointXYZRGBA(const pcl::PointCloud<pcl::PointXYZRGBA> &cloud,
-                          int ksearch,
-                          double searchRadius,
-                          pcl::PointCloud<pcl::Normal> &out);
-
+                                       int ksearch,
+                                       double searchRadius,
+                                       pcl::PointCloud<pcl::Normal> &out);
 
 //
 void mpcl_extract(pcl::PointCloud<pcl::PointXYZ>::Ptr &incloud,
@@ -33,20 +32,25 @@ void mpcl_extract(pcl::PointCloud<pcl::PointXYZ>::Ptr &incloud,
                   pcl::PointIndices *indices,
                   bool negative);
 
+void mpcl_extract_Normal(pcl::PointCloud<pcl::Normal>::Ptr &incloud,
+                         pcl::PointCloud<pcl::Normal> *outcloud,
+                         pcl::PointIndices *indices,
+                         bool negative);
+
 void mpcl_extract_PointXYZI(pcl::PointCloud<pcl::PointXYZI>::Ptr &incloud,
-                  pcl::PointCloud<pcl::PointXYZI> *outcloud,
-                  pcl::PointIndices *indices,
-                  bool negative);
+                            pcl::PointCloud<pcl::PointXYZI> *outcloud,
+                            pcl::PointIndices *indices,
+                            bool negative);
 
 void mpcl_extract_PointXYZRGB(pcl::PointCloud<pcl::PointXYZRGB>::Ptr &incloud,
-                  pcl::PointCloud<pcl::PointXYZRGB> *outcloud,
-                  pcl::PointIndices *indices,
-                  bool negative);
+                              pcl::PointCloud<pcl::PointXYZRGB> *outcloud,
+                              pcl::PointIndices *indices,
+                              bool negative);
 
 void mpcl_extract_PointXYZRGBA(pcl::PointCloud<pcl::PointXYZRGBA>::Ptr &incloud,
-                  pcl::PointCloud<pcl::PointXYZRGBA> *outcloud,
-                  pcl::PointIndices *indices,
-                  bool negative);
+                               pcl::PointCloud<pcl::PointXYZRGBA> *outcloud,
+                               pcl::PointIndices *indices,
+                               bool negative);
 
 // Octree(OctreePointCloud)
 // void mpcl_deleteVoxelAtPoint(pcl::octree::OctreePointCloud<pcl::PointXYZ>& inOctree, pcl::PointXYZ incloud);
@@ -65,11 +69,10 @@ void mpcl_extract_VFH(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud);
 // // HarrisKeypoint3D
 // // NG(outcloud pcl::PointXYZI)
 // void mpcl_extract_HarrisKeypoint3D(pcl::PointCloud<pcl::PointXYZ>::Ptr &incloud, pcl::PointCloud<pcl::PointXYZ> *outcloud);
-// 
-// 
+//
+//
 // // HarrisKeypoint3D
 // void mpcl_extract_HarrisKeypoint3D(pcl::PointCloud<pcl::PointXYZ>::Ptr &incloud, pcl::PointCloud<pcl::PointXYZI> *outcloud);
-
 
 // Features
 // NormalEstimationMethod
@@ -80,4 +83,3 @@ void mpcl_features_NormalEstimationMethod_SIMPLE_3D_GRADIENT(pcl::IntegralImageN
 void mpcl_features_NormalEstimationMethod_compute(pcl::IntegralImageNormalEstimation<pcl::PointXYZ, pcl::Normal> ne, pcl::PointCloud<pcl::Normal> &out);
 
 #endif // _MINIPCL_H_
-
